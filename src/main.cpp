@@ -20,6 +20,10 @@ NOTE: Once the chain starts the terms are allowed to go above one million.
 */
 
 int main() {
+    const uint64_t limit = 1000000;
+    func::chain_info chain = func::find_longest_chain(limit);
+    std::cout << "The starting number that produces the longest chain under given limit " << limit << " is: " << chain.seed_value << '\n';
+    std::cout << "The lenght (aka how many elements) of the resulting chain is: " << chain.chain_length << '\n';
 
     return 0;
 }

@@ -1,21 +1,39 @@
 #include "include/functions.h"
+#include <cstdint>
+#include <vector>
 
-/*
-The following iterative sequence is defined for the set of positive integers:
+namespace func {
+    func::chain_info find_longest_chain(uint64_t upper_limit) {
+        //Max chain length.
+        uint64_t max_chain_length = 0;
 
-n -> n/2 (n is even)
-n -> 3n+1 (n is odd)
+        //Seed value that gives maximum chain lenght for given upper limit.
+        uint64_t max_chain_length_seed_value = 0;
 
-Using the rule above and starting with 13, we generate the following sequence:
+        //Search loop(s).
+        for (uint64_t i = (upper_limit - 1); i > 0; i--) {
+            std::vector<uint64_t> temp_chain;
+            temp_chain.push_back(i);
+            
+            while (true) {
+                if (temp_chain.back() == 1) {
+                    break;
+                } else if (temp_chain.back() % 2 == 0) {
+                    temp_chain.push_back(temp_chain.back() / 2);
+                } else { //If previous value is odd.
+                    temp_chain.push_back((3 * temp_chain.back()) + 1);
+                }
+            }
 
-13 > 40 > 20 > 10 > 5 > 16 > 8 > 4 > 2 > 1
+            //Check if temp_chain length is greater than max_chain_length.
+            if (static_cast<uint64_t>(temp_chain.size()) > max_chain_length) {
+                max_chain_length = static_cast<uint64_t>(temp_chain.size());
+                max_chain_length_seed_value = i;
+            }
+        }
 
-It can be seen that this sequence (starting at 13 and finishing at 1) contains 10 terms.
-Although it has not been proved yet (Collatz problem), it is thought that all starting numbers finish at 1.
+        func::chain_info result = {.seed_value = max_chain_length_seed_value, .chain_length = max_chain_length};
 
-Which starting number, under one million, produces the longest chain?
-
-NOTE: Once the chain starts the terms are allowed to go above one million.
-*/
-
-namespace func {}
+        return result;
+    }
+}
